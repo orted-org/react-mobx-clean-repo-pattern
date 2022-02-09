@@ -1,0 +1,10 @@
+{
+  "name": "repository_pattern",
+  "version": "1.0.0",
+  "license": "MIT",
+  "dependencies": {
+    "body-parser": "^1.19.1",
+    "express": "^4.17.2",
+    "uuid": "^8.3.2"
+  }
+}
