@@ -1,11 +1,43 @@
 import MTodo from "../Model/MTodo";
 import { Request } from "../Utils/Fetch";
+export interface IRTodo {
+  getTodoList: () => Promise<MTodo[]>;
+  createTodo: (todo: MTodo) => Promise<void>;
+  deleteTodo: (id: string) => Promise<void>;
+}
 
-export default class RTodo {
+// this repo is for todo repository considering local use
+// generally used for mocking or testing
+export class RTodoLocal implements IRTodo {
+  todoList: MTodo[] = [];
+
+  async getTodoList() {
+    return this.todoList;
+  }
+  async createTodo(todo: MTodo) {
+    this.todoList.push(todo);
+    return;
+  }
+  async deleteTodo(id: string) {
+    const temp: MTodo[] = [];
+    for (let i = 0; i < this.todoList.length; i++) {
+      if (this.todoList[i].id !== id) temp.push(this.todoList[i]);
+    }
+    this.todoList = temp;
+    return;
+  }
+}
+
+// this repo is for todo repository considering use with API
+export class RTodoRemote implements IRTodo {
+  baseUrl: string;
+  constructor(baseUrl: string) {
+    this.baseUrl = baseUrl;
+  }
   async getTodoList() {
     const todoList: MTodo[] = [];
     try {
-      const res = await Request.Get("http://localhost:4000/");
+      const res = await Request.Get(`${this.baseUrl}/`);
       if (res.status !== 200) {
         throw new Error("something went wrong");
       }
@@ -22,7 +54,7 @@ export default class RTodo {
   }
   async createTodo(todo: MTodo) {
     try {
-      const res = await Request.Post("http://localhost:4000/", todo);
+      const res = await Request.Post(`${this.baseUrl}/`, todo);
       if (res.status !== 200) {
         throw new Error("something went wrong");
       }
@@ -32,7 +64,7 @@ export default class RTodo {
   }
   async deleteTodo(id: string) {
     try {
-      const res = await Request.Delete(`http://localhost:4000/${id}`);
+      const res = await Request.Delete(`${this.baseUrl}/${id}`);
       if (res.status !== 200) {
         throw new Error("something went wrong");
       }
