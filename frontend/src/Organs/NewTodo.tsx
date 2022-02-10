@@ -1,3 +1,4 @@
+import { v4 as uuidv4 } from "uuid";
 import { useObserver } from "mobx-react-lite";
 import React, { useState } from "react";
 import MTodo from "../Logic/Model/MTodo";
@@ -6,7 +7,7 @@ import { useStores } from "../Logic/Providers/StoresProviders";
 function NewTodo() {
   const stores = useStores();
   const [todo, setTodo] = useState<MTodo>({
-    id: Math.random() + "",
+    id: uuidv4(),
     title: "",
     description: "",
   });

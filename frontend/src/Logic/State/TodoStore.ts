@@ -1,12 +1,12 @@
 import { observable, action, runInAction, makeAutoObservable } from "mobx";
 import MTodo from "../Model/MTodo";
-import RTodo from "../Repository/RTodo";
+import { IRTodo } from "../Repository/RTodo";
 
 export class TodoStore {
   @observable todoList: MTodo[] = [];
   @observable error: string | null = null;
   @observable message: string | null = null;
-  constructor(private todoRepo: RTodo) {
+  constructor(private todoRepo: IRTodo) {
     makeAutoObservable(this);
   }
 
